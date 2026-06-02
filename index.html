@@ -88,20 +88,117 @@
   </main>
 
   <script>
-    let form = document.querySelector('form');
-    form.addEventListener('submit', e => {
+    class ValidationError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "ValidationError";
+      }
+    }
+
+    let form = document.querySelector("form");
+
+    form.addEventListener("submit", e => {
       e.preventDefault();
-      let output = document.querySelector('output');
-      let firstNum = document.querySelector('#first-num').value;
-      let secondNum = document.querySelector('#second-num').value;
-      let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+
+      let output = document.querySelector("output");
+      let firstNum = document.querySelector("#first-num").value;
+      let secondNum = document.querySelector("#second-num").value;
+      let operator = document.querySelector("#operator").value;
+
+      try {
+        if (firstNum === "" || secondNum === "") {
+          throw new ValidationError("Both numbers are required.");
+        }
+
+        let result = eval(`${firstNum} ${operator} ${secondNum}`);
+        output.innerHTML = result;
+      } catch (error) {
+        console.error(error.name + ": " + error.message);
+        output.innerHTML = "Error: " + error.message;
+      } finally {
+        console.log("Calculator try/catch/finally finished.");
+      }
     });
 
-    let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
+    let errorBtns = Array.from(document.querySelectorAll("#error-btns > button"));
 
-    // Start your code here
-    // You may move this JS to another file if you wish
+    errorBtns[0].addEventListener("click", () => {
+      console.log("Console Log Demo: This is a regular log message.");
+    });
+
+    errorBtns[1].addEventListener("click", () => {
+      console.error("Console Error Demo: This is an error message.");
+    });
+
+    errorBtns[2].addEventListener("click", () => {
+      console.count("Console Count Demo");
+    });
+
+    errorBtns[3].addEventListener("click", () => {
+      console.warn("Console Warn Demo: This is a warning message.");
+    });
+
+    errorBtns[4].addEventListener("click", () => {
+      console.assert(2 + 2 === 5, "Console Assert Demo: 2 + 2 does not equal 5.");
+    });
+
+    errorBtns[5].addEventListener("click", () => {
+      console.clear();
+    });
+
+    errorBtns[6].addEventListener("click", () => {
+      console.dir(document.body);
+    });
+
+    errorBtns[7].addEventListener("click", () => {
+      console.dirxml(document.body);
+    });
+
+    errorBtns[8].addEventListener("click", () => {
+      console.group("Console Group Demo");
+      console.log("This message is inside the group.");
+      console.warn("This warning is also inside the group.");
+    });
+
+    errorBtns[9].addEventListener("click", () => {
+      console.groupEnd();
+    });
+
+    errorBtns[10].addEventListener("click", () => {
+      console.table([
+        { name: "Tangjian", lab: "Lab 9", topic: "JavaScript Error Handling" },
+        { name: "Demo User", lab: "Lab 9", topic: "Console Methods" }
+      ]);
+    });
+
+    errorBtns[11].addEventListener("click", () => {
+      console.time("Lab9 Timer");
+    });
+
+    errorBtns[12].addEventListener("click", () => {
+      console.timeEnd("Lab9 Timer");
+    });
+
+    errorBtns[13].addEventListener("click", () => {
+      console.trace("Console Trace Demo");
+    });
+
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.error("Global Error Caught:");
+      console.error("Message:", message);
+      console.error("Source:", source);
+      console.error("Line:", lineno);
+      console.error("Column:", colno);
+      return false;
+    };
+
+    window.addEventListener("error", event => {
+      console.error("window.addEventListener error caught:", event.message);
+    });
+
+    errorBtns[14].addEventListener("click", () => {
+      nonExistentFunction();
+    });
   </script>
 </body>
 
